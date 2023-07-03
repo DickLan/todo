@@ -1,3 +1,6 @@
+// 每一種資料都會有個獨路文件來管理 例如todo資料會由
+// todo.js來管理
+// 這個資料的 資料綱要（框架）就由此定義(Schema)
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const todoSchema = new Schema({

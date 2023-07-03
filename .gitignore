@@ -12,3 +12,6 @@ Desktop.ini
 node_modules
 *.log
 *.gz
+
+# dotenv 因為和權限有關 是敏感資料 所以不上git
+.env

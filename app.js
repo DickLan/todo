@@ -1,14 +1,21 @@
 const express = require('express')
+const mongoose = require('mongoose') // 載入mongoose
 const exphbs = require('express-handlebars')
+// 加入bp 才能把req.body轉成我們想要的格式
+const bodyParser = require('body-parser')
+// 讓這個app.js裏麵 也可以使用todo.js的內容
+const Todo = require('./models/todo') //載入Todo model
+const todo = require('./models/todo')
+
 // 設定app為express伺服器
 // 這個伺服器屬於應用程式 和資料庫伺服器不同
 const app = express()
+
 const port = 3000
 
 // =========================model========
-const mongoose = require('mongoose') // 載入mongoose
-const Todo = require('./models/todo') //載入Todo model
-// 讓這個app.js裏麵 也可以使用todo.js的內容
+
+
 
 // 加入這行 限制：只在非正式環境時 使用dotenv
 if (process.env.NODE_ENV !== 'production') {
@@ -29,12 +36,19 @@ db.on('error', () => {
 // 連線成功 另外 執行callback後就會解除監聽器
 db.once('open', () => {
   console.log('mongodb connected!')
+  // .catch(error =>)
+
 })
+
 
 // =============view=================
 
+
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: 'hbs' }))
 app.set('view engine', 'hbs')
+
+// app.use 規定每一筆請求都需要透過bp進行前處理
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
   Todo.find()
@@ -42,6 +56,18 @@ app.get('/', (req, res) => {
     .then(todos => res.render('index', { todos }))
     .catch(errro => console.log(error))
 })
+
+app.get('/todos/new', (req, res) => {
+  return res.render('new')
+})
+
+app.post('/todos', (req, res) => {
+  const name = req.body.name
+  return Todo.create({ name })
+    .then(() => res.redirect('/'))
+    .catch(error => console.log('err'))
+})
+
 
 app.listen(port, () => {
   console.log('server is running now')

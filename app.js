@@ -1,4 +1,5 @@
 const express = require('express')
+const exphbs = require('express-handlebars')
 // 設定app為express伺服器
 // 這個伺服器屬於應用程式 和資料庫伺服器不同
 const app = express()
@@ -22,9 +23,13 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
+// =============view=================
+
+app.engine('hbs', exphbs({ defaultLayout: 'main', extname: 'hbs' }))
+app.set('view engine', 'hbs')
 
 app.get('/', (req, res) => {
-  res.send('Web shjow')
+  res.render('index')
 })
 
 app.listen(port, () => {

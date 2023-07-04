@@ -68,6 +68,17 @@ app.post('/todos', (req, res) => {
     .catch(error => console.log('err'))
 })
 
+app.get('/todos/:id', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id) // 從資料庫找出資料
+    .lean()//因為不想讓mongoose幫我們多處理資料 所以用lean 把資料轉成單純的js物件
+    // 撈資料後若想render 就要先用lean()
+    .then((todo) => res.render('detail', { todo }))//然後把資料送給前端樣板
+    .catch(error => console.log(errro))
+})
+
+
+
 
 app.listen(port, () => {
   console.log('server is running now')

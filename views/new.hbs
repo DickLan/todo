@@ -1,3 +1,7 @@
+{{!-- action用來墊億 表單資料發送的位置 --}}
+{{!-- 下方意思：用post方式發資料給todos --}}
+{{!-- 所以等會要再新增一條post /todos路由來接收這筆資料 --}}
+{{!-- req.body.name就來自於這裡的name命名 --}}
 <form action="/todos" method="POST">
   <input type="text" placeholder="name" name="name">
   <button type="submit">Create</button>

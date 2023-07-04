@@ -74,10 +74,29 @@ app.get('/todos/:id', (req, res) => {
     .lean()//因為不想讓mongoose幫我們多處理資料 所以用lean 把資料轉成單純的js物件
     // 撈資料後若想render 就要先用lean()
     .then((todo) => res.render('detail', { todo }))//然後把資料送給前端樣板
-    .catch(error => console.log(errro))
+    .catch(error => console.log(error))
 })
 
+app.get('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+    .lean()
+    .then((todo) => res.render('edit', { todo }))
+    .catch(error => console.log(error))
+})
 
+app.post('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  const name = req.body.name
+  return Todo.findById(id) //查詢資料
+    .then(todo => { //如果查詢成功 修改後重新儲存資料
+      todo.name = name
+      return todo.save()//因為要用todo.save 所以這裡不用lean
+    })
+    //非同步（一次執行多任務的）的各階段，最好都用then來銜接
+    .then(() => res.redirect(`/todos/${id}`))
+    .catch(error => console.log(error))
+})
 
 
 app.listen(port, () => {

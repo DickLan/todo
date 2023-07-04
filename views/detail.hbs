@@ -1,3 +1,6 @@
 <p> {{todo.name}}</p>
 <a href="/todos/{{todo._id}}/edit">edit</a>
 <a href="/">back</a>
+{{!-- <a>只能get 所以這裡用form讓button能post --}}
+  <form action="/todos/{{todo._id}}/delete" method="post" style="display: inline;">
+    <button type="submit">delete</button>

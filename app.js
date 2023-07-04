@@ -89,12 +89,19 @@ app.post('/todos/:id/edit', (req, res) => {
   const id = req.params.id
   const name = req.body.name
   return Todo.findById(id) //查詢資料
-    .then(todo => { //如果查詢成功 修改後重新儲存資料
-      todo.name = name
+    .then(todo => { //如果查詢成功 
+      todo.name = name //修改 之後重新儲存資料
       return todo.save()//因為要用todo.save 所以這裡不用lean
     })
     //非同步（一次執行多任務的）的各階段，最好都用then來銜接
     .then(() => res.redirect(`/todos/${id}`))
+    .catch(error => console.log(error))
+})
+app.post('/todos/:id/delete', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+    .then(todo => todo.remove())
+    .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })
 

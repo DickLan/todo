@@ -10,6 +10,10 @@ const todoSchema = new Schema({
   },
   done: {
     type: Boolean
+  },
+  isDone: {
+    type: Boolean,
+    default: false
   }
 })
 // 匯出一個名為Todo的模型 該模型用mongoose.model()方法創建 並且依照todoSchema這個樣式

@@ -87,10 +87,12 @@ app.get('/todos/:id/edit', (req, res) => {
 
 app.post('/todos/:id/edit', (req, res) => {
   const id = req.params.id
-  const name = req.body.name
+  const { name, isDone } = req.body //一次assign兩個屬性存成變數
+  // 解構賦值
   return Todo.findById(id) //查詢資料
     .then(todo => { //如果查詢成功 
       todo.name = name //修改 之後重新儲存資料
+      todo.isDone = isDone === 'on'
       return todo.save()//因為要用todo.save 所以這裡不用lean
     })
     //非同步（一次執行多任務的）的各階段，最好都用then來銜接

@@ -3,9 +3,7 @@ const mongoose = require('mongoose') // 載入mongoose
 const exphbs = require('express-handlebars')
 // 加入bp 才能把req.body轉成我們想要的格式
 const bodyParser = require('body-parser')
-// 讓這個app.js裏麵 也可以使用todo.js的內容
-const Todo = require('./models/todo') //載入Todo model
-const todo = require('./models/todo')
+
 // 載入method-module
 const methodOverride = require('method-override')
 
@@ -55,63 +53,12 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method')) //需要在網址使用query string "?" 例如?_method=xx 當路由設定了這組字串
 // 就會覆蓋html form預設的post方式
 
-app.get('/', (req, res) => {
-  Todo.find()
-    .lean()
-    .sort({ _id: 'asc' })
-    .then(todos => res.render('index', { todos }))
-    .catch(errro => console.log(error))
-})
-
-app.get('/todos/new', (req, res) => {
-  return res.render('new')
-})
-
-app.post('/todos', (req, res) => {
-  const name = req.body.name
-  return Todo.create({ name })
-    .then(() => res.redirect('/'))
-    .catch(error => console.log('err'))
-})
-
-app.get('/todos/:id', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id) // 從資料庫找出資料
-    .lean()//因為不想讓mongoose幫我們多處理資料 所以用lean 把資料轉成單純的js物件
-    // 撈資料後若想render 就要先用lean()
-    .then((todo) => res.render('detail', { todo }))//然後把資料送給前端樣板
-    .catch(error => console.log(error))
-})
-
-app.get('/todos/:id/edit', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id)
-    .lean()
-    .then((todo) => res.render('edit', { todo }))
-    .catch(error => console.log(error))
-})
-
-app.put('/todos/:id', (req, res) => {
-  const id = req.params.id
-  const { name, isDone } = req.body //一次assign兩個屬性存成變數
-  // 解構賦值
-  return Todo.findById(id) //查詢資料
-    .then(todo => { //如果查詢成功 
-      todo.name = name //修改 之後重新儲存資料
-      todo.isDone = isDone === 'on'
-      return todo.save()//因為要用todo.save 所以這裡不用lean
-    })
-    //非同步（一次執行多任務的）的各階段，最好都用then來銜接
-    .then(() => res.redirect(`/todos/${id}`))
-    .catch(error => console.log(error))
-})
-app.delete('/todos/:id', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id)
-    .then(todo => todo.remove())
-    .then(() => res.redirect('/'))
-    .catch(error => console.log(error))
-})
+// 引用路由器
+// 引入路由器時 路徑設定為/routes 就會自動去尋找目錄下名為index的檔案
+// 所以這裡其實是 require index.js
+const routes = require('./routes')
+// 將request導入
+app.use(routes)
 
 
 app.listen(port, () => {

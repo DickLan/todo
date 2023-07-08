@@ -6,6 +6,8 @@ const bodyParser = require('body-parser')
 // 讓這個app.js裏麵 也可以使用todo.js的內容
 const Todo = require('./models/todo') //載入Todo model
 const todo = require('./models/todo')
+// 載入method-module
+const methodOverride = require('method-override')
 
 // 設定app為express伺服器
 // 這個伺服器屬於應用程式 和資料庫伺服器不同
@@ -47,8 +49,11 @@ db.once('open', () => {
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: 'hbs' }))
 app.set('view engine', 'hbs')
 
+
 // app.use 規定每一筆請求都需要透過bp進行前處理
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(methodOverride('_method')) //需要在網址使用query string "?" 例如?_method=xx 當路由設定了這組字串
+// 就會覆蓋html form預設的post方式
 
 app.get('/', (req, res) => {
   Todo.find()
@@ -86,7 +91,7 @@ app.get('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   const id = req.params.id
   const { name, isDone } = req.body //一次assign兩個屬性存成變數
   // 解構賦值
@@ -100,7 +105,7 @@ app.post('/todos/:id/edit', (req, res) => {
     .then(() => res.redirect(`/todos/${id}`))
     .catch(error => console.log(error))
 })
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
     .then(todo => todo.remove())

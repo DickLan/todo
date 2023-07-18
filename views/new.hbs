@@ -2,7 +2,15 @@
 {{!-- 下方意思：用post方式發資料給todos --}}
 {{!-- 所以等會要再新增一條post /todos路由來接收這筆資料 --}}
 {{!-- req.body.name就來自於這裡的name命名 --}}
-<form action="/todos" method="POST">
+{{!-- <form action="/todos" method="POST">
   <input type="text" placeholder="name" name="name">
   <button type="submit">Create</button>
+</form> --}}
+
+<!-- ./views/new.handlebars -->
+<form action="/todos" method="POST" style="display: inline;">
+  <div class="input-group">
+    <input class="form-control" type="text" placeholder="name" name="name">
+    <button class="btn btn-success" type="submit">Create</button>
+  </div>
 </form>

@@ -4,11 +4,12 @@ const Todo = require('../../models/todo')
 
 
 
-
+// 前往"新增“頁面
 router.get('/new', (req, res) => {
   return res.render('new')
 })
 
+// 新增一筆資料
 router.post('/', (req, res) => {
   const name = req.body.name
   return Todo.create({ name })
@@ -16,6 +17,7 @@ router.post('/', (req, res) => {
     .catch(error => console.log('err'))
 })
 
+// 瀏覽特定資料 detail
 router.get('/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id) // 從資料庫找出資料
@@ -25,6 +27,7 @@ router.get('/:id', (req, res) => {
     .catch(error => console.log(error))
 })
 
+// 前往"修改“頁面
 router.get('/:id/edit', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
@@ -33,6 +36,7 @@ router.get('/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
+// 修改特定資料
 router.put('/:id', (req, res) => {
   const id = req.params.id
   const { name, isDone } = req.body //一次assign兩個屬性存成變數
@@ -55,6 +59,8 @@ router.put('/:id', (req, res) => {
     .catch(error => console.log(error))
 
 })
+
+// 刪除特定資料
 router.delete('/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)

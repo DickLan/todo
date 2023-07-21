@@ -1,4 +1,5 @@
 const express = require('express')
+const session = require('express-session')
 const exphbs = require('express-handlebars')
 // 加入bp 才能把req.body轉成我們想要的格式
 const bodyParser = require('body-parser')
@@ -29,6 +30,15 @@ const routes = require('./routes')
 // 將request導入
 app.use(routes)
 
+// 設定session
+// 在應用程式伺服器上 用來存放使用者狀態的機制 稱為 session
+// 實作角度上看 session 是指程式伺服器上的儲存方案(一個儲存空間) 專門用來儲存使用者狀態
+app.use(session({
+  secret: 'ThisIsMySecret', //session用來驗證 session id 的字串．該字串由伺服器設定 一般不會洩漏給用戶端
+  resave: false, // resave 為true時 每一次與使用者互動後 強制把 session 更新到 session store中
+  saveUninitialized: true //強制將未初始化的 session 存回 session store: 未初始化＝這個 session 是新的 沒有修改過的，例如未登入的使用者的 session
+}))
+// 設定好後 在application NETWORK 裡面就會看到sid  由 session id 和 signature(就是只有伺服器才知道的secret) 組成
 
 app.listen(port, () => {
   console.log('server is running now')

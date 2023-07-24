@@ -18,6 +18,7 @@ const routes = require('./routes')
 // 定義 passport 函式
 const usePassport = require('./config/passport')
 
+
 // 設定app為express伺服器
 // 這個伺服器屬於應用程式 和資料庫伺服器不同
 const app = express()

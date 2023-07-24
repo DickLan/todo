@@ -16,11 +16,14 @@ module.exports = app => {
     User.findOne({ email })
       .then(user => {
         if (!user) {
+          console.log('Mail not registered')
           return done(null, false, { message: 'Mail not registered!' })
         }
-        if ((user.password !== password)) {
+        if (user.password !== password) {
+          console.log('Email or password incorrect')
           return done(null, false, { message: "Email or password incorrect." })
         }
+        console.log('login success!');
         return done(null, user, { message: 'login success!' })
       })
       .catch(err => done(err, null))

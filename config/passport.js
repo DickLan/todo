@@ -39,6 +39,7 @@ module.exports = (app) => {
   // 設定序列化與反序列化  使用者id:使用者資料 的配對
   passport.serializeUser((user, done) => {
     console.log(user)
+    console.log('===========passport.js=========')
     done(null, user.id)
   })
   passport.deserializeUser((id, done) => {

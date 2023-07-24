@@ -48,7 +48,11 @@ app.use(session({
 // !!!!必須放在 app.use(session)之後
 // 因為session裡面定義了secert 是用來驗證session id的字串
 usePassport(app)
-
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.isAuthenticated()
+  res.locals.user = req.user
+  next()
+})
 
 // app.use 規定每一筆請求都需要透過bp進行前處理
 //需要在網址使用query string "?" 例如?_method=xx 當路由設定了這組字串

@@ -11,27 +11,6 @@ router.post('/login', passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/users/login'
 }))
-// router.post('/login', (req, res, next) => {
-//   passport.authenticate('local', (err, user, info) => {
-//     if (err) {
-//       console.log('Error occurred:', err);
-//       return next(err);
-//     }
-//     if (!user) {
-//       console.log('Authentication failed:', info.message);
-//       return res.redirect('/users/login');
-//     }
-//     // 如果驗證成功，則使用 req.login 進行登入
-//     req.login(user, (err) => {
-//       if (err) {
-//         console.log('Error occurred during login:', err);
-//         return next(err);
-//       }
-//       console.log('Login success:', user);
-//       return res.redirect('/');
-//     });
-//   })(req, res, next);
-// });
 
 
 router.get('/logout', (req, res) => {

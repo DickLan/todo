@@ -7,7 +7,14 @@ const User = require('../models/user')
 // 也可以寫成 module.exports = function (app) {
 // ...
 // }
-module.exports = app => {
+
+var session = require('express-session');
+
+
+
+module.exports = (app) => {
+
+
   // 初始化 passport 模組
   app.use(passport.initialize())
   app.use(passport.session())
@@ -31,6 +38,7 @@ module.exports = app => {
 
   // 設定序列化與反序列化  使用者id:使用者資料 的配對
   passport.serializeUser((user, done) => {
+    console.log(user)
     done(null, user.id)
   })
   passport.deserializeUser((id, done) => {

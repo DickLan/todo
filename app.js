@@ -28,17 +28,10 @@ app.engine('hbs', exphbs({ defaultLayout: 'main', extname: 'hbs' }))
 app.set('view engine', 'hbs')
 
 
-// app.use 規定每一筆請求都需要透過bp進行前處理
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(methodOverride('_method'))
-//需要在網址使用query string "?" 例如?_method=xx 當路由設定了這組字串
-// 就會覆蓋html form預設的post方式
 
-// 調用 usePassport 函式 並傳入必要參數 app
-usePassport(app)
 
-// 將request導入
-app.use(routes)
+
+
 
 // 設定session
 // 在應用程式伺服器上 用來存放使用者狀態的機制 稱為 session
@@ -49,6 +42,21 @@ app.use(session({
   saveUninitialized: true //強制將未初始化的 session 存回 session store: 未初始化＝這個 session 是新的 沒有修改過的，例如未登入的使用者的 session
 }))
 // 設定好後 在application NETWORK 裡面就會看到sid  由 session id 和 signature(就是只有伺服器才知道的secret) 組成
+
+
+// 調用 usePassport 函式 並傳入必要參數 app
+// !!!!必須放在 app.use(session)之後
+// 因為session裡面定義了secert 是用來驗證session id的字串
+usePassport(app)
+
+
+// app.use 規定每一筆請求都需要透過bp進行前處理
+//需要在網址使用query string "?" 例如?_method=xx 當路由設定了這組字串
+// 就會覆蓋html form預設的post方式
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(methodOverride('_method'))
+// 將request導入
+app.use(routes)
 
 app.listen(port, () => {
   console.log('server is running now')

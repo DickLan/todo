@@ -6,7 +6,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 // 設定連線到mongoDB 當程式執行到這一行時 就會和資料庫連線
 // 我們傳入連線字串，讓程式知道要去哪裡尋找資料庫
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 
 // 取得資料庫連線狀態
 // 執行mongoose.connect後會得到一個連線狀態，所以我們設定一個參數

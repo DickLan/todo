@@ -8,12 +8,16 @@ const todoSchema = new Schema({
     type: String,
     require: true
   },
-  done: {
-    type: Boolean
-  },
   isDone: {
     type: Boolean,
     default: false
+  },
+  userId: { //加入關聯設定
+    // 翻譯： 去參照 User 的 ObjectId ．這是Mongoose提供的 collections 一對多關聯的功能 又稱 populate 讓我們能建立不同 Ｃ 之間的關聯
+    type: Schema.Types.ObjectId, // 定義 UserId 這個項目是一個 ObjectId 也就是他會連向另一個資料物件
+    ref: 'User', // 參考對象是 User model
+    index: true, // 把 userId 設為索引，當我們常常使用某個欄位來查找資料時，可以考慮將欄位設為索引，可以增加查詢資料時的讀取效能
+    require: true
   }
 })
 // 匯出一個名為Todo的模型 該模型用mongoose.model()方法創建 並且依照todoSchema這個樣式

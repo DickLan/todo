@@ -2,7 +2,8 @@
   <div class="col-md-6 m-auto">
     <div class="card card-body">
       <h1 class="text-center mt-3">Register</h1>
-
+      {{> message}}
+      {{!-- hbs 提供的寫法 只要看到 > 就會去partials 資料夾下找符合的樣板 --}}
       <form action="" method="POST">
         <div class="mb-3">
           <label for="name" class="mb-2">Name</label>

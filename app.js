@@ -5,7 +5,7 @@ const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 // 載入method-module
 const methodOverride = require('method-override')
-
+const flash = require('connect-flash') // flash 是和 express.js 搭配 用來做flash message 的套件，給予使用者即時提醒，通常在畫面跳轉後會消失 也就是只存在一個 req~res cycle 中
 // const COCK = require('./config/test')
 require('./config/mongoose')
 
@@ -48,9 +48,13 @@ app.use(session({
 // !!!!必須放在 app.use(session)之後
 // 因為session裡面定義了secert 是用來驗證session id的字串
 usePassport(app)
+app.use(flash()) // 掛載套件
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated()
   res.locals.user = req.user
+  // 透過 req.flash~res.locals 的接力，最後就可以在前端樣板使用
+  res.locals.success_msg = req.flash('success_msg') // 設定 success msg
+  res.locals.warning_msg = req.flash('warning_msg')
   next()
 })
 

@@ -2,6 +2,8 @@ const passport = require('passport')
 // 需注意 LS 的載入方式 是官方的指定寫法 必續這樣寫 .Strategy
 const LocalStrategy = require('passport-local').Strategy
 const User = require('../models/user')
+const bcrypt = require('bcryptjs')
+
 // 這裡匯出的是一個 function
 // 在其他地方調用時 app 會是函示的參數
 // 也可以寫成 module.exports = function (app) {
@@ -26,12 +28,13 @@ module.exports = (app) => {
           console.log('Mail not registered')
           return done(null, false, { message: 'Mail not registered!' })
         }
-        if (user.password !== password) {
-          console.log('Email or password incorrect')
-          return done(null, false, { message: "Email or password incorrect." })
-        }
-        console.log('login success!');
-        return done(null, user, { message: 'login success!' })
+        return bcrypt.compare(password, user.password).then(isMatch => {
+          // user.password是資料庫儲存的密碼 password是當前輸入的登入密碼
+          if (!isMatch) {
+            return done(null, false, { message: 'Email or Password incorrect.' })
+          }
+          return done(null, user)
+        })
       })
       .catch(err => done(err, null))
   }))

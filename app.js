@@ -70,7 +70,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 // 將request導入
 app.use(routes)
-
+//
 app.listen(port, () => {
   console.log('server is running now')
 })

@@ -15,3 +15,4 @@ node_modules
 
 # dotenv 因為和權限有關 是敏感資料 所以不上git
 .env
+.space

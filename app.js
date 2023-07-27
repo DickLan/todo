@@ -8,7 +8,12 @@ const methodOverride = require('method-override')
 const flash = require('connect-flash') // flash 是和 express.js 搭配 用來做flash message 的套件，給予使用者即時提醒，通常在畫面跳轉後會消失 也就是只存在一個 req~res cycle 中
 // const COCK = require('./config/test')
 require('./config/mongoose')
-
+if (process.env.NODE_ENV !== 'production') {
+  // 如果不在 正式上線環境(production) 就透過dotenv去讀取在env檔案的資訊
+  // 如果在正式上線模式 通常會自動新增 NODE_ENV 並設值為production 因此可用
+  // 這個來做判斷
+  require('dotenv').config
+}
 // 引用路由器
 // 引入路由器時 若路徑設定為/routes 就會自動去尋找目錄下名為index的檔案
 // 所以這裡其實是在 require routes底下的 index.js
@@ -22,7 +27,7 @@ const usePassport = require('./config/passport')
 // 設定app為express伺服器
 // 這個伺服器屬於應用程式 和資料庫伺服器不同
 const app = express()
-const port = 3000
+const port = process.env.PORT
 // =============view=================
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: 'hbs' }))
 app.set('view engine', 'hbs')
@@ -37,7 +42,7 @@ app.set('view engine', 'hbs')
 // 在應用程式伺服器上 用來存放使用者狀態的機制 稱為 session
 // 實作角度上看 session 是指程式伺服器上的儲存方案(一個儲存空間) 專門用來儲存使用者狀態
 app.use(session({
-  secret: 'ThisIsMySecret', //session用來驗證 session id 的字串．該字串由伺服器設定 一般不會洩漏給用戶端
+  secret: process.env.SESSION_SECRET, //session用來驗證 session id 的字串．該字串由伺服器設定 一般不會洩漏給用戶端
   resave: false, // resave 為true時 每一次與使用者互動後 強制把 session 更新到 session store中
   saveUninitialized: true //強制將未初始化的 session 存回 session store: 未初始化＝這個 session 是新的 沒有修改過的，例如未登入的使用者的 session
 }))

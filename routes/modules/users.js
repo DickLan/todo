@@ -76,6 +76,7 @@ router.post('/register', (req, res) => {
   User.findOne({ email }).then(user => {
     // 如果已經註冊 就退回原本註冊畫面
     if (user) {
+      errors.push({ message: 'User already existed.' })
       console.log('already registered.')
       res.render('register', {
         errors, name, email, password, confirmPassword

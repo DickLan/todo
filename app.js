@@ -12,7 +12,7 @@ if (process.env.NODE_ENV !== 'production') {
   // 如果不在 正式上線環境(production) 就透過dotenv去讀取在env檔案的資訊
   // 如果在正式上線模式 通常會自動新增 NODE_ENV 並設值為production 因此可用
   // 這個來做判斷
-  require('dotenv').config
+  require('dotenv').config()
 }
 // 引用路由器
 // 引入路由器時 若路徑設定為/routes 就會自動去尋找目錄下名為index的檔案
